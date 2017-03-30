@@ -18,6 +18,7 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
   webpack(webpackConfig, function (err, stats) {
     spinner.stop()
     if (err) throw err
+    //noinspection JSAnnotator
     process.stdout.write(stats.toString({
       colors: true,
       modules: false,
