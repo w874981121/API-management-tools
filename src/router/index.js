@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/page/index'
 import Login from '@/page/loginSystem'
-
+import Register from '@/page/registerUser'
 Vue.use(Router)
 
 export default new Router({
@@ -15,6 +15,10 @@ export default new Router({
       path: '/index',
       name: 'index',
       component: Index
+    }, {
+      path: '/register',
+      name: 'register',
+      component: Register
     }
   ]
 })
