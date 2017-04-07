@@ -73,6 +73,8 @@ router.get('/register', function (req, res) {
   })
 })
 
+
+//登陆功能
 router.get('/vc', function (req, res) {
   let data = {};
   let code = Vcode.img();

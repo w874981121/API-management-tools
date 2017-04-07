@@ -74,13 +74,13 @@
 
   .login-window {
     width: 360px;
-    height: 340px;
+    height: 380px;
     border-radius: 4px;
     background: rgba(255, 255, 255, 0.8);
     position: absolute;
     right: 200px;
     top: 50%;
-    margin-top: -170px;
+    margin-top: -190px;
     h1 {
       margin: 35px 0;
       text-align: center;
