@@ -7,8 +7,8 @@
 
 'use strict';
 const crypto = require('crypto');
-function hmacAlgorithm(algorithm) {
-  var shasum = crypto.createHmac(algorithm);
+const hmacAlgorithm = function(algorithm) {
+  var shasum = crypto.createHash(algorithm);
   return {
     field: function (string) {
       if (string) {
