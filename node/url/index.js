@@ -5,7 +5,7 @@
 //登陆
 const express = require('express');
 const router = express.Router();
-
+const hashsha1 = require('../mongodb/hash');
 const Vcode = require('./ccap');//验证码
 const mongoose = require('mongoose');
 const User = require('../mongodb/myUser')
@@ -57,7 +57,7 @@ router.get('/register', function (req, res) {
   let data = {}
   let doc = {
     username: req.query.username,
-    password: req.query.password
+    password: hashsha1.field(req.query.password)
   }
   new User(doc).save(function (err) {
     if (err) {
@@ -75,25 +75,49 @@ router.get('/register', function (req, res) {
 
 
 //登陆功能
-router.get('/vc', function (req, res) {
+// 一段返回验证码图片
+router.get('/', function (req, res, next) {
   let data = {};
-  let code = Vcode.img();
-  data.name = 'base64';
-  data.vc = code;
-  res.end(JSON.stringify(data));
-})
-
-router.get('/vc/Verificationcode', function (req, res) {
-  let data = {};
-  let codetring = Vcode.codes(req.query.Verificationcode)
-  if (codetring) {
-    data.statr = codetring;
+  if (req.query.username) {
+    if (req.query.vc && req.query.password) {
+      // console.log(req.session.vc, '空白')
+      if (req.session.vc !== req.query.vc) {
+        data.prompt = '验证码错误'
+        console.log(req.query.vc)
+        res.end(JSON.stringify(data));
+      }
+      User.findByName(req.query.username, function (err, string) {
+        if (err) {
+          console.log(err, 错误)
+          data.err = err
+          res.end(JSON.stringify(data));
+        } else {
+          if (string && string.password === hashsha1.field(req.query.password)) {
+            data.statr = true;
+          } else {
+            data.statr = false;
+            data.prompt = '账号或密码错误'
+          }
+          res.end(JSON.stringify(data));
+        }
+      })
+    } else {
+      data.prompt = '请输入完整信息'
+      res.end(JSON.stringify(data));
+    }
   } else {
-    data.vc = Vcode.img()
-    data.statr = codetring;
+    data.vc = Vcode.img();
+    console.log(req.session)
+    req.session.vc = Vcode.code;
+    console.log(req.session)
+    res.end(JSON.stringify(data));
   }
-  data.name = '验证';
-  res.end(JSON.stringify(data));
 })
-module.exports = router;
+// 二段对照验证码
+// router.get('/login', function (req, res) {
+//   let data = {};
+//
+// })
 
+
+module.exports = router;

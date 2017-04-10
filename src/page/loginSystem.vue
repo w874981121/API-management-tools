@@ -10,11 +10,11 @@
       </Input>
       <div class="login-input f0">
         <Input class="input-vc" placeholder="请输入验证码" size="large" v-model="Verificationcode"></Input>
-        <div class="img-vc" @click="Ajax">
-          <img :src="vc" alt="验证码">
+        <div class="img-vc" @click="loginClickAjax">
+          <img :src="srcvc" alt="验证码">
         </div>
       </div>
-      <Button class="login-input" @click="clickAjax" size="large" type="success" long>登录</Button>
+      <Button class="login-input" @click="loginClickAjax(loginData())" size="large" type="success" long>登录</Button>
       <router-link class="register" to="/register">注册用户</router-link>
     </div>
   </div>
@@ -28,34 +28,37 @@
         username: '',
         password: '',
         Verificationcode: '',
-        vc: ''
+        srcvc: ''
       }
     },
     mounted () {
-      this.Ajax()
+      this.loginClickAjax()
     },
     methods: {
-      Ajax () {
-        this.$http.get('http://172.20.187.76:3000/vc', {
-          params: {
-            username: this.username
-          }
+      loginClickAjax (data) {
+        this.$http.get('http://127.0.0.1:3000/', {
+          params: data
         }).then(res => {
           console.log(res)
-          this.vc = 'data:image/png;base64,' + res.body.vc
+          if (res.body.vc) {
+            this.srcvc = 'data:image/png;base64,' + res.body.vc
+          } else if (res.body.prompt) {
+            this.$Message.error(res.body.prompt)
+          }
         })
       },
-      clickAjax () {
-        this.$http.get('http://172.20.187.76:3000/vc/Verificationcode', {
-          params: {
-            Verificationcode: this.Verificationcode
-          }
-        }).then(res => {
-          console.log(res)
-          if (!res.body.statr) {
-            this.vc = 'data:image/png;base64,' + res.body.vc
-          }
-        })
+      loginData () {
+        let data = {}
+        if (this.username) {
+          data.username = this.username
+        }
+        if (this.password) {
+          data.password = this.password
+        }
+        if (this.Verificationcode) {
+          data.vc = this.Verificationcode
+        }
+        return data
       }
     }
   }

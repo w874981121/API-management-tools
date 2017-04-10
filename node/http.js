@@ -4,12 +4,15 @@
 'use strict';
 const express = require('express');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+// let llll = 1
 // const cookieParser = require('cookie-parser');
-const routes=require('./url/index');
+
 // const data = {name: "王延琦", age: 25}
 // 数据库
 // const mongoose = require('mongoose');
 // var ccap = require('ccap');
+//
 // const User = require('./mongodb/myUser')
 //
 // mongoose.connect('mongodb://127.0.0.1:27017/user');
@@ -39,18 +42,33 @@ const routes=require('./url/index');
 // })
 
 const app = express();
-
 var server = app.listen(3000, function () {
   var port = server.address().port
   console.log("应用实例，访问地址为http://", port)
 })
+// app.use(cookieParser('name'));
+app.set('trust proxy', 1)
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {maxAge: 60000},
+  store: new MongoStore({
+    url: 'mongodb://localhost/test-session'
+  })
+}));
 
-app.all('*', function(req, res, next) {
+app.all('*', function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-  res.header("X-Powered-By",' 3.2.1')
+  res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+  res.header("X-Powered-By", ' 3.2.1')
   res.header("Content-Type", "application/json;charset=utf-8");
   next();
 });
+const routes = require('./url/index');
 app.use('/', routes);
+
+
+
+

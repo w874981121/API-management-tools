@@ -53,8 +53,16 @@
             params: data
           }).then(res => {
             console.log(res)
+            if (res.body.msg) {
+              this.$Message.success(res.body.prompt)
+            } else {
+              this.$Message.error(res.body.prompt)
+            }
           })
         } else {
+          this.$Message.error('两次输入密码不相同，请重新输入')
+          this.password = ''
+          this.password2 = ''
           console.log('两次密码不一样')
         }
       }
