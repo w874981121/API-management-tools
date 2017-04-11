@@ -49,11 +49,10 @@
         }
 
         if (this.password === this.password2) {
-          this.$http.get('http://127.0.0.1:3000/register', {
+          this.$http.get('http://127.0.0.1:3000/login/register', {
             params: data
-          }).then(res => {
-            console.log(res)
-            if (res.body.msg) {
+          }).then(function (res) {
+            if (res.body.state) {
               this.$Message.success(res.body.prompt)
             } else {
               this.$Message.error(res.body.prompt)
@@ -63,7 +62,6 @@
           this.$Message.error('两次输入密码不相同，请重新输入')
           this.password = ''
           this.password2 = ''
-          console.log('两次密码不一样')
         }
       }
 

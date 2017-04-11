@@ -8,13 +8,13 @@
       <Input class="login-input" placeholder="请输入密码" size="large" v-model="password">
       <Icon slot="prepend" class="login-icon" type="key"></Icon>
       </Input>
-      <div class="login-input f0">
-        <Input class="input-vc" placeholder="请输入验证码" size="large" v-model="Verificationcode"></Input>
-        <div class="img-vc" @click="loginClickAjax">
-          <img :src="srcvc" alt="验证码">
-        </div>
-      </div>
-      <Button class="login-input" @click="loginClickAjax(loginData())" size="large" type="success" long>登录</Button>
+      <!--<div class="login-input f0">-->
+      <!--<Input class="input-vc" placeholder="请输入验证码" size="large" v-model="Verificationcode"></Input>-->
+      <!--<div class="img-vc" @click="loginClickAjax">-->
+      <!--<img :src="srcvc" alt="验证码">-->
+      <!--</div>-->
+      <!--</div>-->
+      <Button class="login-input" @click="loginClickAjax" size="large" type="success" long>登录</Button>
       <router-link class="register" to="/register">注册用户</router-link>
     </div>
   </div>
@@ -31,23 +31,8 @@
         srcvc: ''
       }
     },
-    mounted () {
-      this.loginClickAjax()
-    },
     methods: {
-      loginClickAjax (data) {
-        this.$http.get('http://127.0.0.1:3000/', {
-          params: data
-        }).then(res => {
-          console.log(res)
-          if (res.body.vc) {
-            this.srcvc = 'data:image/png;base64,' + res.body.vc
-          } else if (res.body.prompt) {
-            this.$Message.error(res.body.prompt)
-          }
-        })
-      },
-      loginData () {
+      loginClickAjax () {
         let data = {}
         if (this.username) {
           data.username = this.username
@@ -58,7 +43,16 @@
         if (this.Verificationcode) {
           data.vc = this.Verificationcode
         }
-        return data
+        this.$http.get('http://127.0.0.1:3000/login/go', {
+          params: data
+        }).then(res => {
+          if (res.body.state) {
+            this.$router.push({path: '/index', params: {uuid: res.body.uuid}})
+            this.$Message.success(res.body.prompt)
+          } else {
+            this.$Message.error(res.body.prompt)
+          }
+        })
       }
     }
   }
@@ -77,11 +71,11 @@
 
   .login-window {
     width: 360px;
-    height: 380px;
+    height: 320px;
     border-radius: 4px;
     background: rgba(255, 255, 255, 0.8);
     position: absolute;
-    right: 200px;
+    right: 160px;
     top: 50%;
     margin-top: -190px;
     h1 {
@@ -119,8 +113,8 @@
 
   .register {
     display: block;
-    width: 100%;
-    margin-top: 20px;
+    width: 100px;
+    margin: 40px auto 0 auto;
     text-align: center;
   }
 </style>
