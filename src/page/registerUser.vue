@@ -1,3 +1,4 @@
+<!--注册-->
 <template>
   <div class="registerUser">
     <div class="register-window">

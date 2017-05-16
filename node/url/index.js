@@ -1,15 +1,14 @@
 /**
  * Created by wangyanqi on 2017/4/1.
+ * 用户操作接口
  */
 'use strict';
 //登陆
 const express = require('express');
 const router = express.Router();
 const hashsha1 = require('../mongodb/hash');
-const Vcode = require('./ccap');//验证码
-const mongoose = require('mongoose');
+// const Vcode = require('./ccap');//验证码
 const User = require('../mongodb/myUser')
-const db = mongoose.connect('mongodb://127.0.0.1:27017/user');
 
 // 注册接口
 // 一段接口验证账号是否存在
@@ -17,7 +16,6 @@ router.get('/register', function (req, res, next) {
   let data = {}
   User.findByName(req.query.username, function (err, string) {
     if (err) {
-      console.log(err, 错误)
       data.err = err
       res.end(JSON.stringify(data));
     } else {
@@ -92,6 +90,7 @@ router.get('/go', function (req, res, next) {
           if (string && string.password === hashsha1(req.query.password)) {
             data.state = true;
             data.uuid = string._id
+            data.username = string.username
             data.prompt = '登录成功！'
           } else {
             data.state = false;

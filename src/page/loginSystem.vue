@@ -1,3 +1,4 @@
+<!--登陆-->
 <template>
   <div class="loginSystem">
     <div class="login-window">
@@ -31,9 +32,16 @@
         srcvc: ''
       }
     },
+    mounted () {
+      let tpStorage = window.sessionStorage
+      if (tpStorage['username'] !== 'undefined') {
+        this.username = tpStorage['username']
+      }
+    },
     methods: {
       loginClickAjax () {
         let data = {}
+        let tpStorage = window.sessionStorage
         if (this.username) {
           data.username = this.username
         }
@@ -47,7 +55,10 @@
           params: data
         }).then(res => {
           if (res.body.state) {
-            this.$router.push({path: '/index', params: {uuid: res.body.uuid}})
+            this.$router.push({path: '/nbproject'})
+            tpStorage.uuid = res.body.uuid
+            tpStorage.username = res.body.username
+            console.log(res.body.uuid)
             this.$Message.success(res.body.prompt)
           } else {
             this.$Message.error(res.body.prompt)
