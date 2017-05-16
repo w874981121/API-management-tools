@@ -8,6 +8,10 @@ const express = require('express');
 const router = express.Router();
 const hashsha1 = require('../mongodb/hash');
 // const Vcode = require('./ccap');//验证码
+<<<<<<< HEAD
+=======
+const mongoose = require('mongoose');
+>>>>>>> c36daa276775dcc43790e81675817fc07b711c7b
 const User = require('../mongodb/myUser')
 
 // 注册接口
@@ -35,6 +39,7 @@ router.get('/register', function (req, res, next) {
   let data = {}
   if (req.query.password) {
     if (req.query.invitationcode) {
+      /*
       if (req.query.invitationcode - 0 === 11428020) {
         next()
       } else {
@@ -42,6 +47,8 @@ router.get('/register', function (req, res, next) {
         data.prompt = '邀请码错误！'
         res.end(JSON.stringify(data));
       }
+      */
+      next()
     } else {
       data.state = true;
       data.prompt = '请输入邀请码！'
@@ -89,8 +96,13 @@ router.get('/go', function (req, res, next) {
         } else {
           if (string && string.password === hashsha1(req.query.password)) {
             data.state = true;
+<<<<<<< HEAD
             data.uuid = string._id
             data.username = string.username
+=======
+            data.uuid = string._id;
+            data.nickname = string.username;
+>>>>>>> c36daa276775dcc43790e81675817fc07b711c7b
             data.prompt = '登录成功！'
           } else {
             data.state = false;

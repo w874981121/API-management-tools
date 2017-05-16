@@ -60,6 +60,8 @@
             tpStorage.username = res.body.username
             console.log(res.body.uuid)
             this.$Message.success(res.body.prompt)
+            sessionStorage.setItem('uuid', res.body.uuid)
+            sessionStorage.setItem('nickname', res.body.nickname)
           } else {
             this.$Message.error(res.body.prompt)
           }
