@@ -8,10 +8,7 @@ const express = require('express');
 const router = express.Router();
 const hashsha1 = require('../mongodb/hash');
 // const Vcode = require('./ccap');//验证码
-<<<<<<< HEAD
-=======
 const mongoose = require('mongoose');
->>>>>>> c36daa276775dcc43790e81675817fc07b711c7b
 const User = require('../mongodb/myUser')
 
 // 注册接口
@@ -96,13 +93,8 @@ router.get('/go', function (req, res, next) {
         } else {
           if (string && string.password === hashsha1(req.query.password)) {
             data.state = true;
-<<<<<<< HEAD
-            data.uuid = string._id
-            data.username = string.username
-=======
             data.uuid = string._id;
             data.nickname = string.username;
->>>>>>> c36daa276775dcc43790e81675817fc07b711c7b
             data.prompt = '登录成功！'
           } else {
             data.state = false;
